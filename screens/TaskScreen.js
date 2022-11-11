@@ -1,21 +1,26 @@
-import { View, TouchableOpacity, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from 'react-native'
+import React, { useContext } from 'react'
+import AppContext from '../context/app/appContext'
 
 import SafeView from '../components/SafeView';
-
+import Task from '../components/Task'
 import { AntDesign } from '@expo/vector-icons';
 
 export default function TaskScreen() {
+  const appContext = useContext(AppContext);
+
+  const { taskItems } = appContext
   return (
     <SafeView>
       <View>
-        <Text>
-          {'TaskScreen'}
-        </Text>
+        {
+          taskItems.map((task, index) => {
+            return (
+              <Task text={task} style={{ marginVertical: 10 }} key={index} index={index} />
+            )
+          })
+        }
       </View>
-      <TouchableOpacity style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: '#87CEEB', position: 'absolute', bottom: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
-        <AntDesign name="plus" size={24} color="black" />
-      </TouchableOpacity>
     </SafeView>
   )
 }

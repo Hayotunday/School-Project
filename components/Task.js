@@ -1,16 +1,21 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import AppContext from '../context/app/appContext'
 
-export default function Task(props) {
+export default function Task({ style, text, index }) {
+	const appContext = useContext(AppContext);
+
+	const { deleteTask } = appContext
+
 	const [done, setDone] = useState(false);
 
-	const completeTask = (index) => {
+	const completeTask = () => {
 		setDone(!done);
 	};
 
 	return (
-		<View style={{ paddingHorizontal: 5, flexDirection: 'row', backgroundColor: '#87CEEB', height: 80, width: "100%", alignItems: 'center', justifyContent: 'center', borderRadius: 10 }}>
+		<View style={[{ paddingHorizontal: 5, flexDirection: 'row', backgroundColor: '#87CEEB', height: 80, width: "100%", alignItems: 'center', justifyContent: 'center', borderRadius: 10 }, style]}>
 			<View style={{
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -39,10 +44,10 @@ export default function Task(props) {
 					numberOfLines={3}
 					ellipsizeMode={"tail"}
 				>
-					{props.text}
+					{text}
 				</Text>
 			</View>
-			<TouchableOpacity onPress={() => { }} style={{ width: '10%' }}>
+			<TouchableOpacity onPress={() => { deleteTask(index) }} style={{ width: '10%' }}>
 				<MaterialIcons name="delete" size={24} color="black" />
 			</TouchableOpacity>
 		</View>

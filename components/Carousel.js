@@ -2,7 +2,7 @@ import { View, FlatList, Platform } from "react-native";
 import React from "react";
 
 const Space = () => {
-	return <View style={{ marginLeft: 15 }} />
+	return <View style={{ marginLeft: 25 }} />
 }
 
 export default Carousel = ({ data, renderItem }) => {
