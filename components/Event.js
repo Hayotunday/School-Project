@@ -1,12 +1,14 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useContext } from 'react'
-import appContext from '../context/app/appContext'
+import AppContext from '../context/app/appContext'
 
 import { MaterialIcons } from '@expo/vector-icons'
 
 
-export default function Event({ data: { day, code, title, time } }) {
+export default function Event({ data }) {
+  const appContext = useContext(AppContext)
 
+  const { deleteEvent } = appContext
 
   return (
     <View style={{
@@ -16,25 +18,25 @@ export default function Event({ data: { day, code, title, time } }) {
         color: '#333',
         fontSize: 20,
         fontWeight: "500",
-      }}>{day}</Text>
+      }}>{data.day}</Text>
       <Text style={{
         color: '#333',
         fontSize: 25,
         textTransform: "uppercase",
         fontWeight: "bold",
-      }}>{code}</Text>
+      }}>{data.code}</Text>
       <Text style={{ fontSize: 15, color: '#333', }} numberOfLines={4} ellipsizeMode={"tail"}>
-        {title}
+        {data.title}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-        <Text style={{
+        {/* <Text style={{
           color: '#333',
           fontSize: 20,
           fontWeight: "700",
         }}>
           {time}
-        </Text>
-        <TouchableOpacity onPress={() => { }}>
+        </Text> */}
+        <TouchableOpacity onPress={() => { deleteEvent() }}>
           <MaterialIcons name="delete" size={24} color="black" />
         </TouchableOpacity>
       </View>

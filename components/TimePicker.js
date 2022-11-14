@@ -5,11 +5,23 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 export default function TimePicker() {
   const [time, setTime] = useState(new Date());
 
-  const onChange = (event, selectedTime) => {
+  const onChange = (selectedTime) => {
     const currentTime = selectedTime;
     setTime(currentTime);
-    // console.log(currentTime)
   };
+
+  function format(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+  let actualTime = format(time)
 
   const showTimePicker = () => {
     DateTimePickerAndroid.open({
@@ -21,27 +33,25 @@ export default function TimePicker() {
     });
   };
 
-  function format(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    console.log(strTime)
-    return strTime;
-  }
 
   return (
-    <View style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10, height: 42, justifyContent: 'center' }}>
-      <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', height: 42, justifyContent: 'space-between' }}>
+      <View style={{
+        borderColor: '#87CEEB', width: '70%', borderWidth: 2, borderRadius: 5, justifyContent: 'center',
+        paddingVertical: 2,
+        paddingHorizontal: 10
+      }}>
         {/* <Text>{time.getHours().toLocaleString()} : {time.getMinutes().toLocaleString()}</Text> */}
-        <Text>{format(time)}</Text>
-        <TouchableOpacity onPress={showTimePicker} style={{ backgroundColor: '#87CEEB', padding: 5, borderRadius: 8, alignItems: 'center' }}>
-          <Text style={{ justifyContent: 'center', alignItems: 'center' }}>Set Time</Text>
-        </TouchableOpacity>
+        <Text>{actualTime}</Text>
       </View>
+      <TouchableOpacity onPress={showTimePicker} style={{
+        backgroundColor: '#87CEEB', width: '25%', padding: 5, borderRadius: 8, alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 2,
+        paddingHorizontal: 10
+      }}>
+        <Text style={{ justifyContent: 'center', alignItems: 'center' }}>Set Time</Text>
+      </TouchableOpacity>
     </View>
   )
 }

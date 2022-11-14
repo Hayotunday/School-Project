@@ -18,64 +18,14 @@ export default function HomeScreen({ navigation }) {
   const {
     taskItems,
     eventItems,
+    modalVisible,
     addTask,
     openModal,
     closeModal
   } = appContext;
 
-  const [task, setTask] = useState();
-
-  const [taskVisible, setTaskVisible] = useState(false)
-  const [eventVisible, setEventVisible] = useState(false)
-
-  // const [event, setEvent] = useState({ day: '', code: '', title: '' });
-  // const [eventItems, setEventItems] = useState([]);
-
-  // const handleAddTask = () => {
-  //   if (task === null) {
-  //     Alert.alert('', 'Please Enter a task', [{ text: '' }], { cancelable: true });
-  //   } else {
-  //     setTaskVisible(!taskVisible);
-  //     Keyboard.dismiss();
-  //     setTaskItems([...taskItems, task]);
-  //     setTask(null);
-  //   }
-  // };
-
-  const handleAddEvent = () => {
-    // let itemId = 0;
-
-    // setEvent({ ...event, id: ++itemId })
-    console.log(event)
-    Keyboard.dismiss();
-    setEventItems([...eventItems, event]);
-    setEvent(null);
-    console.log(eventItems)
-  };
-
-  const handleEventChange = (e) => {
-    // const { name, value } = e.target;
-    setEvent(prevState => ({
-      ...prevState,
-      e
-    }));
-  };
-
-
-  const completeEvent = (index) => {
-    let eventsCopy = [...eventItems];
-    eventsCopy.splice(index, 1);
-    setEventItems(eventsCopy);
-  };
-  const completeTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy);
-  };
-
-
   const renderCourse = ({ item, index }) => {
-    return <Event key={index} data={item} />;
+    return <Event key={index} data={item} index={index} />;
   };
 
   return (
@@ -90,7 +40,6 @@ export default function HomeScreen({ navigation }) {
         <Text style={{ fontSize: 15 }}>Have a nice Day!</Text>
       </View>
 
-
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flexDirection: 'row', borderRadius: 15, width: '100%', paddingHorizontal: 10, paddingVertical: 8, alignItems: 'center', backgroundColor: '#87CEEB', marginRight: 10 }}>
           <Ionicons name="search-outline" size={20} color='#333' style={{ marginRight: 5 }} />
@@ -98,7 +47,7 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
 
-      <View style={{ marginTop: 15 }}>
+      <View style={{ marginTop: 5 }}>
         <View style={{ flexDirection: 'row', marginBottom: 15, justifyContent: 'space-between' }}>
           <Text style={{ fontSize: 20, fontWeight: '800' }}>Lectures</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Event')}>
@@ -106,7 +55,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View>
-          <Carousel data={lectures} renderItem={renderCourse} />
+          <Carousel data={eventItems} renderItem={renderCourse} />
 
           {/* <TouchableOpacity style={{ borderRadius: 20, backgroundColor: '#ddd', height: 40, width: 40, alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 0, top: 70 }}>
             <Entypo name="chevron-right" size={24} color="black" />
@@ -126,28 +75,30 @@ export default function HomeScreen({ navigation }) {
         </View>
         <View style={{ marginBottom: 10 }}>
           {
-            // taskItems.length !== 0 && <Task text={taskItems[0]} />
-            taskItems.map((task, index) => {
-              return (
-                <Task text={task} style={{ marginVertical: 10 }} key={index} index={index} />
-              )
-            })
+            taskItems.length !== 0 && <Task text={taskItems[0]} />
+            // taskItems.map((item, index) => {
+            //   return (
+            //     <Task text={item} style={{ marginVertical: 10 }} key={index} index={index} />
+            //   )
+            // })
           }
         </View>
       </View>
 
       <TouchableOpacity
-        onPress={openModal()}
+        onPress={() => { openModal() }}
         style={{
           width: 50,
           height: 50,
+          // borderWidth: 2,
+          // borderColor: '#fff',
           borderRadius: 25,
           backgroundColor: '#87CEEB',
           position: 'absolute',
           bottom: 10,
           alignSelf: 'center',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
         <AntDesign name="plus" size={24} color="black" />
       </TouchableOpacity>
@@ -157,7 +108,7 @@ export default function HomeScreen({ navigation }) {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={closeModal()}
+        onRequestClose={() => { closeModal() }}
       >
         <View
           style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
@@ -186,7 +137,7 @@ export default function HomeScreen({ navigation }) {
               </Text>
               <View style={{ justifyContent: "space-between" }}>
                 <TouchableOpacity
-                  onPress={() => { closeModal(); }}
+                  onPress={() => { navigation.navigate('NewEvent'); closeModal() }}
                   style={{
                     flexDirection: "row",
                     padding: 10,
@@ -197,7 +148,7 @@ export default function HomeScreen({ navigation }) {
                   <Text style={{ marginLeft: 10, fontSize: 18 }}>Event</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => { closeModal(); }}
+                  onPress={() => { navigation.navigate('NewTask'); closeModal() }}
                   style={{
                     flexDirection: "row",
                     padding: 10,
@@ -209,7 +160,7 @@ export default function HomeScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
               <View style={{ alignItems: 'flex-end', justifyContent: 'center', width: '100%' }}>
-                <TouchableOpacity onPress={() => { closeModal() }} style={{ backgroundColor: '#87CEEB', padding: 5, width: 55, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => { closeModal() }} style={{ backgroundColor: '#87CEEB', padding: 10, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', fontWeight: '800' }}>
                   <Text style={{ fontSize: 15 }}>Cancel</Text>
                 </TouchableOpacity>
               </View>
@@ -227,116 +178,8 @@ export default function HomeScreen({ navigation }) {
           setEventVisible(!eventVisible);
         }}
       >
-        <View
-          style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
-        >
-          <View
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: 25,
-              height: "60%",
-              width: "90%",
-              paddingVertical: 20,
-              paddingHorizontal: 25,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
-            }}
-          >
-            <View style={{ height: "100%", justifyContent: "space-around" }}>
-              <Text style={{ fontSize: 20, fontWeight: "600" }}>
-                Add New Event
-              </Text>
-              <TextInput
-                style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-                placeholder='Enter day'
-                value={event.day}
-                onChangeText={() => handleEventChange(event.day)}
-              />
-              <TextInput
-                style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-                placeholder='Enter course code'
-                value={event.code}
-                onChangeText={() => handleEventChange(event.code)}
-              />
-              <TextInput
-                style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-                placeholder='Enter cousre title'
-                value={event.title}
-                onChangeText={() => handleEventChange(event.title)}
-              />
-
-              <TimePicker />
-
-              <View style={{ flexDirection: 'row', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={{ backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { setEventVisible(!eventVisible); setEvent(null) }}>
-                  <Text style={{ fontSize: 15 }}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { handleAddEvent() }}>
-                  <Text style={{ fontSize: 15 }}>Add</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
+        
       </Modal> */}
-
-      {/* Tasks Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={taskVisible}
-        onRequestClose={openTaskVisible()}
-      >
-        <View
-          style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
-        >
-          <View
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: 25,
-              height: 200,
-              width: "90%",
-              paddingVertical: 20,
-              paddingHorizontal: 25,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 4,
-              elevation: 5,
-            }}
-          >
-            <View style={{ height: "100%", justifyContent: "space-around" }}>
-              <Text style={{ fontSize: 20, fontWeight: "600" }}>
-                Add New Task
-              </Text>
-              <TextInput
-                style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-                placeholder='Enter task'
-                value={task}
-                onChangeText={(task) => setTask(task)}
-              />
-
-              <View style={{ flexDirection: 'row', width: "100%", alignItems: 'center', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={{ backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, width: 65, justifyContent: 'center', alignItems: 'center' }} onPress={() => { openTaskVisible(); setTask(null) }}>
-                  <Text style={{ fontSize: 15 }}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, width: 60, justifyContent: 'center', alignItems: 'center' }} onPress={() => { addTask(task, setTask) }}>
-                  <Text style={{ fontSize: 15 }}>Add</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
 
     </SafeView>
   )

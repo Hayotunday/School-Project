@@ -14,28 +14,30 @@ export default (state, action) => {
         ...state,
         taskItems: [...state.taskItems, action.payload]
       }
-    case ADD_EVENT:
-      return {
-        ...state,
-      }
     case DELETE_TASK:
       return {
         ...state,
-        taskItems: [...state.taskItems, action.payload]
+        taskItems: action.payload
+      }
+    case ADD_EVENT:
+      return {
+        ...state,
+        eventItems: [...state.eventItems, action.payload]
       }
     case DELETE_EVENT:
       return {
         ...state,
+        eventItems: action.payload
       }
     case OPEN_MODAL:
       return {
         ...state,
-        modalVisible: true
+        modalVisible: action.payload
       }
     case CLOSE_MODAL:
       return {
         ...state,
-        modalVisible: false
+        modalVisible: action.payload
       }
     default:
       return state
