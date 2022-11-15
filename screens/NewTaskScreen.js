@@ -33,6 +33,7 @@ export default function NewTaskScreen({ navigation }) {
             numberOfLines={10}
             textAlignVertical={'top'}
             autoCapitalize={'sentences'}
+            returnKeyType={'send'}
           />
         </View>
         <View>

@@ -40,12 +40,13 @@ const AppState = props => {
   };
 
   // Add Event
-  const addEvent = (CourseCode, courseTitle, value) => {
-    if (CourseCode === null || courseTitle === null || value === null) {
+  const addEvent = (CourseCode, courseTitle, courseDay, actualTime) => {
+    if (CourseCode === null || courseTitle === null || courseDay === null) {
       Alert.alert('', 'Please Enter all fields', [{ text: '' }], { cancelable: true });
     } else {
       Keyboard.dismiss();
-      const event = { day: value, code: CourseCode, title: courseTitle };
+      // const event = { day: courseDay, code: CourseCode, title: courseTitle, time: actualTime };
+      const event = { day: courseDay, code: CourseCode, title: courseTitle };
       dispatch({ type: ADD_EVENT, payload: event })
       console.log(state)
     }
@@ -55,7 +56,7 @@ const AppState = props => {
   const deleteEvent = (index) => {
     let eventsCopy = [...state.eventItems];
     eventsCopy.splice(index, 1);
-    dispatch({ type: DELETE_TASK, payload: eventsCopy })
+    dispatch({ type: DELETE_EVENT, payload: eventsCopy })
     console.log(state)
   }
 
@@ -69,6 +70,18 @@ const AppState = props => {
     dispatch({ type: CLOSE_MODAL, payload: false }); console.log(state)
   }
 
+  // Format time
+  const formatTime = (time) => {
+    var hours = time.getHours();
+    var minutes = time.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
   return <AppContext.Provider
     value={{
       taskItems: state.taskItems,
@@ -79,7 +92,8 @@ const AppState = props => {
       addEvent,
       deleteEvent,
       openModal,
-      closeModal
+      closeModal,
+      formatTime
     }}
   >
     {props.children}

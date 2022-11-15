@@ -7,7 +7,6 @@ import SafeView from '../components/SafeView';
 import Event from '../components/Event';
 import Carousel from '../components/Carousel'
 import Task from '../components/Task';
-import TimePicker from '../components/TimePicker';
 
 import { Ionicons, Entypo, MaterialIcons, Octicons, AntDesign } from '@expo/vector-icons';
 import { lectures } from '../model/data';
@@ -19,7 +18,6 @@ export default function HomeScreen({ navigation }) {
     taskItems,
     eventItems,
     modalVisible,
-    addTask,
     openModal,
     closeModal
   } = appContext;
@@ -85,6 +83,7 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
 
+      {/* Add new button */}
       <TouchableOpacity
         onPress={() => { openModal() }}
         style={{
@@ -168,18 +167,6 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-
-      {/* Events Modal */}
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={eventVisible}
-        onRequestClose={() => {
-          setEventVisible(!eventVisible);
-        }}
-      >
-        
-      </Modal> */}
 
     </SafeView>
   )

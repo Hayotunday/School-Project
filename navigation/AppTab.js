@@ -9,9 +9,9 @@ const Tab = createBottomTabNavigator();
 
 export default function AppStack() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName='HomeStack'>
       <Tab.Screen name='HomeStack' component={HomeStack} options={{ headerShown: false }} />
-      <Tab.Screen name='NoteStack' component={NoteStack} />
+      <Tab.Screen name='NoteStack' component={NoteStack} options={{ headerShown: false }} />
     </Tab.Navigator>
   )
 }

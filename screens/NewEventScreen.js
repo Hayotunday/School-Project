@@ -19,20 +19,58 @@ const data = [
 export default function NewEventScreen() {
   const appContext = useContext(AppContext);
 
-  const { addEvent } = appContext;
+  const { addEvent, formatTime } = appContext;
 
   const [value, setValue] = useState(null);
-  const [title, setTitle] = useState()
-  const [code, setCode] = useState()
+  const [title, setTitle] = useState(null)
+  const [code, setCode] = useState(null)
+  const [time, setTime] = useState(new Date());
 
   return (
     <SafeView style={{ paddingHorizontal: 15 }}>
       {/* , justifyContent: 'flex-end' */}
-
       <View style={{}}>
         <View style={{ marginBottom: 20 }}>
-
-          <TimePicker />
+          <TextInput
+            style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
+            placeholder='Enter cousre title'
+            value={title}
+            onChangeText={(title) => { setTitle(title) }}
+          />
+          <TextInput
+            style={{ marginTop: 10, borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
+            placeholder='Enter course code'
+            value={code}
+            onChangeText={(code) => { setCode(code) }}
+          />
+          <Dropdown
+            style={{
+              marginVertical: 10,
+              borderColor: '#87CEEB',
+              borderWidth: 2,
+              borderRadius: 5,
+              paddingVertical: 2,
+              paddingHorizontal: 10
+            }}
+            data={data}
+            labelField="label"
+            valueField="value"
+            onChange={item => {
+              setValue(item.value);
+            }}
+            placeholder='Select day'
+            value={value}
+            containerStyle={{
+              borderRadius: 10
+            }}
+            dropdownPosition={'bottom'}
+            showsVerticalScrollIndicator={false}
+            itemContainerStyle={{
+              height: 50,
+              borderRadius: 10
+            }}
+          />
+          <TimePicker time={time} setTime={setTime} />
         </View>
 
         <View style={{}}>
@@ -46,45 +84,6 @@ export default function NewEventScreen() {
             <Text style={{ fontSize: 15 }}>Add</Text>
           </TouchableOpacity>
         </View>
-        <TextInput
-          style={{ borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-          placeholder='Enter cousre title'
-          value={title}
-          onChangeText={(title) => { setTitle(title) }}
-        />
-        <TextInput
-          style={{ marginTop: 10, borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
-          placeholder='Enter course code'
-          value={code}
-          onChangeText={(code) => { setCode(code) }}
-        />
-        <Dropdown
-          style={{
-            marginVertical: 10,
-            borderColor: '#87CEEB',
-            borderWidth: 2,
-            borderRadius: 5,
-            paddingVertical: 2,
-            paddingHorizontal: 10
-          }}
-          data={data}
-          labelField="label"
-          valueField="value"
-          onChange={item => {
-            setValue(item.value);
-          }}
-          placeholder='Select day'
-          value={value}
-          containerStyle={{
-            borderRadius: 10
-          }}
-          dropdownPosition={'bottom'}
-          showsVerticalScrollIndicator={false}
-          itemContainerStyle={{
-            height: 50,
-            borderRadius: 10
-          }}
-        />
       </View>
     </SafeView>
   )

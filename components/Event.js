@@ -5,7 +5,7 @@ import AppContext from '../context/app/appContext'
 import { MaterialIcons } from '@expo/vector-icons'
 
 
-export default function Event({ data }) {
+export default function Event({ data: { day, title, code } }) {
   const appContext = useContext(AppContext)
 
   const { deleteEvent } = appContext
@@ -18,15 +18,15 @@ export default function Event({ data }) {
         color: '#333',
         fontSize: 20,
         fontWeight: "500",
-      }}>{data.day}</Text>
+      }}>{day}</Text>
       <Text style={{
         color: '#333',
         fontSize: 25,
         textTransform: "uppercase",
         fontWeight: "bold",
-      }}>{data.code}</Text>
+      }}>{code}</Text>
       <Text style={{ fontSize: 15, color: '#333', }} numberOfLines={4} ellipsizeMode={"tail"}>
-        {data.title}
+        {title}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
         {/* <Text style={{

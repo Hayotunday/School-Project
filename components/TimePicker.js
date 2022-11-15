@@ -1,29 +1,18 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import AppContext from '../context/app/appContext';
 
-export default function TimePicker() {
-  const [time, setTime] = useState(new Date());
+export default function TimePicker({ time, setTime }) {
+  const appContext = useContext(AppContext);
+
+  const { formatTime } = appContext
 
   const onChange = (selectedTime) => {
-    const currentTime = selectedTime;
-    setTime(currentTime);
+    setTime(formatTime(selectedTime));
   };
 
-  function format(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
-
-  let actualTime = format(time)
-
-  const showTimePicker = () => {
+  const showTimePicker = (time) => {
     DateTimePickerAndroid.open({
       value: time,
       onChange,
@@ -33,7 +22,6 @@ export default function TimePicker() {
     });
   };
 
-
   return (
     <View style={{ flexDirection: 'row', height: 42, justifyContent: 'space-between' }}>
       <View style={{
@@ -42,7 +30,7 @@ export default function TimePicker() {
         paddingHorizontal: 10
       }}>
         {/* <Text>{time.getHours().toLocaleString()} : {time.getMinutes().toLocaleString()}</Text> */}
-        <Text>{actualTime}</Text>
+        <Text>{formatTime(time)}</Text>
       </View>
       <TouchableOpacity onPress={showTimePicker} style={{
         backgroundColor: '#87CEEB', width: '25%', padding: 5, borderRadius: 8, alignItems: 'center',
