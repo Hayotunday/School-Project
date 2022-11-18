@@ -89,8 +89,6 @@ export default function HomeScreen({ navigation }) {
         style={{
           width: 50,
           height: 50,
-          // borderWidth: 2,
-          // borderColor: '#fff',
           borderRadius: 25,
           backgroundColor: '#87CEEB',
           position: 'absolute',

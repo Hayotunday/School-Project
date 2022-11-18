@@ -8,7 +8,7 @@ export default function NewTaskScreen({ navigation }) {
 
   const { addTask } = appContext
 
-  const [text, setText] = useState()
+  const [text, setText] = useState('')
 
   return (
     <SafeView style={{ paddingHorizontal: 15 }}>
@@ -47,7 +47,7 @@ export default function NewTaskScreen({ navigation }) {
               alignItems: 'center',
               fontWeight: '800'
             }}
-            onPress={() => { setText(null) }}
+            onPress={() => { setText('') }}
           >
             <Text style={{ fontSize: 15 }}>Clear</Text>
           </TouchableOpacity>
@@ -61,7 +61,7 @@ export default function NewTaskScreen({ navigation }) {
               alignItems: 'center',
               fontWeight: '800'
             }}
-            onPress={() => { navigation.goBack() }}
+            onPress={() => { setText(''); navigation.goBack(); }}
           >
             <Text style={{ fontSize: 15 }}>Cancel</Text>
           </TouchableOpacity>
@@ -74,7 +74,7 @@ export default function NewTaskScreen({ navigation }) {
               alignItems: 'center',
               fontWeight: '800'
             }}
-            onPress={() => { navigation.goBack(); addTask(text, setText) }}
+            onPress={() => { addTask(text, setText, navigation) }}
           >
             <Text style={{ fontSize: 15 }}>Add</Text>
           </TouchableOpacity>

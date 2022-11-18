@@ -5,7 +5,7 @@ import AppContext from '../context/app/appContext'
 import { MaterialIcons } from '@expo/vector-icons'
 
 
-export default function Event({ data: { day, title, code } }) {
+export default function Event({ data: { day, title, code, time }, index }) {
   const appContext = useContext(AppContext)
 
   const { deleteEvent } = appContext
@@ -18,25 +18,29 @@ export default function Event({ data: { day, title, code } }) {
         color: '#333',
         fontSize: 20,
         fontWeight: "500",
-      }}>{day}</Text>
+      }}>
+        {day}
+      </Text>
       <Text style={{
         color: '#333',
         fontSize: 25,
         textTransform: "uppercase",
         fontWeight: "bold",
-      }}>{code}</Text>
+      }}>
+        {code}
+      </Text>
       <Text style={{ fontSize: 15, color: '#333', }} numberOfLines={4} ellipsizeMode={"tail"}>
         {title}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-        {/* <Text style={{
+        <Text style={{
           color: '#333',
           fontSize: 20,
           fontWeight: "700",
         }}>
           {time}
-        </Text> */}
-        <TouchableOpacity onPress={() => { deleteEvent() }}>
+        </Text>
+        <TouchableOpacity onPress={() => { deleteEvent(index) }}>
           <MaterialIcons name="delete" size={24} color="black" />
         </TouchableOpacity>
       </View>

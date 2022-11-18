@@ -1,10 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Platform } from 'react-native'
 import React, { useState, useContext } from 'react'
 import SafeView from '../components/SafeView'
 import AppContext from '../context/app/appContext'
 import { Dropdown } from 'react-native-element-dropdown';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import TimePicker from '../components/TimePicker';
 
-import TimePicker from '../components/TimePicker'
+// import TimePicker from '../components/TimePicker'
 
 const data = [
   { label: 'Sunday', value: 'Sunday' },
@@ -16,15 +18,32 @@ const data = [
   { label: 'Saturday', value: 'Saturday' },
 ];
 
-export default function NewEventScreen() {
+export default function NewEventScreen({ navigation }) {
   const appContext = useContext(AppContext);
-
   const { addEvent, formatTime } = appContext;
 
-  const [value, setValue] = useState(null);
+  const [day, setDay] = useState(null);
   const [title, setTitle] = useState(null)
   const [code, setCode] = useState(null)
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date(Date.now()));
+  const [timePicker, setTimePicker] = useState(false)
+
+  const showTimePicker = () => {
+    setTimePicker(true);
+  };
+
+  const onTimeSelected = (event, value) => {
+    setTime(value);
+    setTimePicker(false);
+  };
+
+  const clearAll = () => {
+    setCode(null)
+    setDay(null)
+    setTime(new Date(Date.now()))
+    setTitle(null)
+  }
+
 
   return (
     <SafeView style={{ paddingHorizontal: 15 }}>
@@ -56,34 +75,46 @@ export default function NewEventScreen() {
             labelField="label"
             valueField="value"
             onChange={item => {
-              setValue(item.value);
+              setDay(item.value);
             }}
             placeholder='Select day'
-            value={value}
+            value={day}
             containerStyle={{
               borderRadius: 10
             }}
             dropdownPosition={'bottom'}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
             itemContainerStyle={{
-              height: 50,
+              height: 55,
               borderRadius: 10
             }}
           />
-          <TimePicker time={time} setTime={setTime} />
+          <TimePicker time={time} showTimePicker={showTimePicker} />
         </View>
 
         <View style={{}}>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { }}>
+          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { clearAll() }}>
             <Text style={{ fontSize: 15 }}>Clear</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { }}>
+          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { clearAll(); navigation.goBack() }}>
             <Text style={{ fontSize: 15 }}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { addEvent(code, title, value) }}>
+          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { addEvent(title, code, day, time, clearAll, navigation) }}>
             <Text style={{ fontSize: 15 }}>Add</Text>
           </TouchableOpacity>
         </View>
+
+
+        {timePicker && (
+          <DateTimePicker
+            value={time}
+            mode={'time'}
+            is24Hour={false}
+            onChange={onTimeSelected}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          />
+        )}
+
       </View>
     </SafeView>
   )

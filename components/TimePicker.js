@@ -1,26 +1,10 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState, useContext } from 'react'
-import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import React, { useContext } from 'react'
 import AppContext from '../context/app/appContext';
 
-export default function TimePicker({ time, setTime }) {
+export default function TimePicker({ time, showTimePicker }) {
   const appContext = useContext(AppContext);
-
   const { formatTime } = appContext
-
-  const onChange = (selectedTime) => {
-    setTime(formatTime(selectedTime));
-  };
-
-  const showTimePicker = (time) => {
-    DateTimePickerAndroid.open({
-      value: time,
-      onChange,
-      mode: 'time',
-      is24Hour: false,
-      display: 'default',
-    });
-  };
 
   return (
     <View style={{ flexDirection: 'row', height: 42, justifyContent: 'space-between' }}>
@@ -29,7 +13,6 @@ export default function TimePicker({ time, setTime }) {
         paddingVertical: 2,
         paddingHorizontal: 10
       }}>
-        {/* <Text>{time.getHours().toLocaleString()} : {time.getMinutes().toLocaleString()}</Text> */}
         <Text>{formatTime(time)}</Text>
       </View>
       <TouchableOpacity onPress={showTimePicker} style={{

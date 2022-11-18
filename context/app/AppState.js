@@ -21,13 +21,14 @@ const AppState = props => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   //  Add Task
-  const addTask = (task, setTask) => {
-    if (task === null) {
+  const addTask = (task, setTask, navigation) => {
+    if (task === '') {
       Alert.alert('', 'Please Enter a task', [{ text: '' }], { cancelable: true });
     } else {
       Keyboard.dismiss();
       dispatch({ type: ADD_TASK, payload: task })
       setTask(task)
+      navigation.goBack()
       console.log(state)
     }
   };
@@ -40,14 +41,20 @@ const AppState = props => {
   };
 
   // Add Event
-  const addEvent = (CourseCode, courseTitle, courseDay, actualTime) => {
-    if (CourseCode === null || courseTitle === null || courseDay === null) {
-      Alert.alert('', 'Please Enter all fields', [{ text: '' }], { cancelable: true });
+  const addEvent = (courseTitle, CourseCode, courseDay, courseTime, clearAll, navigation) => {
+    if (courseTitle === null) {
+      Alert.alert('', 'Please Enter Course title', [{ text: '' }], { cancelable: true });
+    } else if (CourseCode === null) {
+      Alert.alert('', 'Please Enter Course code', [{ text: '' }], { cancelable: true });
+    } else if (courseDay === null) {
+      Alert.alert('', 'Please select day', [{ text: '' }], { cancelable: true });
     } else {
       Keyboard.dismiss();
-      // const event = { day: courseDay, code: CourseCode, title: courseTitle, time: actualTime };
-      const event = { day: courseDay, code: CourseCode, title: courseTitle };
+      let actualTime = formatTime(courseTime)
+      const event = { day: courseDay, code: CourseCode, title: courseTitle, time: actualTime };
       dispatch({ type: ADD_EVENT, payload: event })
+      clearAll()
+      navigation.goBack()
       console.log(state)
     }
   }
