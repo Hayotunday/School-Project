@@ -4,3 +4,7 @@ export const DELETE_TASK = 'DELETE_TASK';
 export const DELETE_EVENT = 'DELETE_EVENT';
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const REGISTER_USER = 'REGISTER_USER';
+export const UPDATE = 'UPDATE';
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';

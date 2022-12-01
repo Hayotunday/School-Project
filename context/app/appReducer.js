@@ -4,7 +4,11 @@ import {
   DELETE_TASK,
   DELETE_EVENT,
   OPEN_MODAL,
-  CLOSE_MODAL
+  CLOSE_MODAL,
+  REGISTER_USER,
+  UPDATE,
+  LOGIN,
+  LOGOUT
 } from '../types';
 
 export default (state, action) => {
@@ -38,6 +42,17 @@ export default (state, action) => {
       return {
         ...state,
         modalVisible: action.payload
+      }
+    case REGISTER_USER:
+      return {
+        ...state,
+        email: action.payload.email,
+        username: action.payload.username,
+        password: action.payload.password,
+      }
+    case UPDATE:
+      return {
+        state: action.payload.update
       }
     default:
       return state

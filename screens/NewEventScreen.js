@@ -55,6 +55,7 @@ export default function NewEventScreen({ navigation }) {
             placeholder='Enter cousre title'
             value={title}
             onChangeText={(title) => { setTitle(title) }}
+            autoCapitalize={'words'}
           />
           <TextInput
             style={{ marginTop: 10, borderColor: '#87CEEB', borderWidth: 2, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 10 }}
@@ -93,14 +94,51 @@ export default function NewEventScreen({ navigation }) {
         </View>
 
         <View style={{}}>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { clearAll() }}>
-            <Text style={{ fontSize: 15 }}>Clear</Text>
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              backgroundColor: '#87CEEB',
+              padding: 8,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 45,
+            }}
+            onPress={() => { clearAll() }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: '800' }}>Clear</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { clearAll(); navigation.goBack() }}>
-            <Text style={{ fontSize: 15 }}>Cancel</Text>
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              backgroundColor: '#87CEEB',
+              height: 45,
+              padding: 8,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            onPress={() => {
+              clearAll(); navigation.goBack()
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: '800' }}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#87CEEB', padding: 8, borderRadius: 10, justifyContent: 'center', alignItems: 'center' }} onPress={() => { addEvent(title, code, day, time, clearAll, navigation) }}>
-            <Text style={{ fontSize: 15 }}>Add</Text>
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              backgroundColor: '#87CEEB',
+              height: 45,
+              padding: 8,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            onPress={() => {
+              addEvent(title, code, day, time, clearAll, navigation)
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: '800' }}>Add</Text>
           </TouchableOpacity>
         </View>
 

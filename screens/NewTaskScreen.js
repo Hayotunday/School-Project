@@ -33,7 +33,6 @@ export default function NewTaskScreen({ navigation }) {
             numberOfLines={10}
             textAlignVertical={'top'}
             autoCapitalize={'sentences'}
-            returnKeyType={'send'}
           />
         </View>
         <View>
@@ -41,6 +40,7 @@ export default function NewTaskScreen({ navigation }) {
             style={{
               backgroundColor: '#87CEEB',
               padding: 8,
+              height: 45,
               marginBottom: 10,
               borderRadius: 10,
               justifyContent: 'center',
@@ -49,12 +49,13 @@ export default function NewTaskScreen({ navigation }) {
             }}
             onPress={() => { setText('') }}
           >
-            <Text style={{ fontSize: 15 }}>Clear</Text>
+            <Text style={{ fontSize: 20, fontWeight: '800' }}>Clear</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               backgroundColor: '#87CEEB',
               padding: 8,
+              height: 45,
               marginBottom: 10,
               borderRadius: 10,
               justifyContent: 'center',
@@ -63,12 +64,13 @@ export default function NewTaskScreen({ navigation }) {
             }}
             onPress={() => { setText(''); navigation.goBack(); }}
           >
-            <Text style={{ fontSize: 15 }}>Cancel</Text>
+            <Text style={{ fontSize: 20, fontWeight: '800' }}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               backgroundColor: '#87CEEB',
               padding: 8,
+              height: 45,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -76,7 +78,7 @@ export default function NewTaskScreen({ navigation }) {
             }}
             onPress={() => { addTask(text, setText, navigation) }}
           >
-            <Text style={{ fontSize: 15 }}>Add</Text>
+            <Text style={{ fontSize: 20, fontWeight: '800' }}>Add</Text>
           </TouchableOpacity>
         </View>
       </View>

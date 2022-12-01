@@ -1,24 +1,45 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { Alert, Keyboard } from 'react-native'
 import AppContext from './appContext';
 import AppReducer from './appReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 import {
   ADD_EVENT,
   ADD_TASK,
   DELETE_EVENT,
   DELETE_TASK,
   OPEN_MODAL,
-  CLOSE_MODAL
+  CLOSE_MODAL,
+  REGISTER_USER,
+  UPDATE,
+  LOGIN,
+  LOGOUT
 } from '../types';
 
 const AppState = props => {
   const initialState = {
+    email: '',
+    username: '',
+    password: '',
     taskItems: [],
     eventItems: [],
     modalVisible: false
   }
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [userToken, setUserToken] = useState(null)
+
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  useEffect(() => {
+    isLoggedIn()
+  }, [])
+
+  useEffect(() => {
+    setItem(state)
+    console.log(state)
+  }, [state])
+
 
   //  Add Task
   const addTask = (task, setTask, navigation) => {
@@ -29,7 +50,6 @@ const AppState = props => {
       dispatch({ type: ADD_TASK, payload: task })
       setTask(task)
       navigation.goBack()
-      console.log(state)
     }
   };
 
@@ -55,7 +75,6 @@ const AppState = props => {
       dispatch({ type: ADD_EVENT, payload: event })
       clearAll()
       navigation.goBack()
-      console.log(state)
     }
   }
 
@@ -64,17 +83,16 @@ const AppState = props => {
     let eventsCopy = [...state.eventItems];
     eventsCopy.splice(index, 1);
     dispatch({ type: DELETE_EVENT, payload: eventsCopy })
-    console.log(state)
   }
 
   // Open Modal
   const openModal = () => {
-    dispatch({ type: OPEN_MODAL, payload: true }); console.log(state)
+    dispatch({ type: OPEN_MODAL, payload: true });
   }
 
   // Open Modal
   const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL, payload: false }); console.log(state)
+    dispatch({ type: CLOSE_MODAL, payload: false });
   }
 
   // Format time
@@ -89,18 +107,124 @@ const AppState = props => {
     return strTime;
   }
 
+  // Register new user
+  const register = async (mail, user, pass, cpass, clearAll) => {
+    if (mail === null || mail === '') {
+      Alert.alert('', 'Please Enter an e-mail', [{ text: '' }], { cancelable: true });
+    } else if (user === null || user === '') {
+      Alert.alert('', 'Please Enter user name', [{ text: '' }], { cancelable: true });
+    } else if (pass === null) {
+      Alert.alert('', 'Please enter password', [{ text: '' }], { cancelable: true });
+    } else if (cpass === null) {
+      Alert.alert('', 'Please confirm password', [{ text: '' }], { cancelable: true });
+    } else {
+      Keyboard.dismiss();
+      if (pass !== cpass) {
+        Alert.alert('', 'Confirm password not correct', [{ text: '' }], { cancelable: true });
+      } else {
+        const details = {
+          email: mail,
+          username: user,
+          password: pass
+        }
+        dispatch({ type: REGISTER_USER, payload: details })
+        setIsLoading(true)
+        setUserToken(user)
+        await AsyncStorage.setItem('userToken', user)
+        setIsLoading(false)
+        clearAll()
+      }
+    }
+  }
+
+  // Login
+  const login = async (user, pass, clearAll) => {
+    let result = getItem()
+
+    if (result == null) {
+      Alert.alert('', 'Please register. No registered user available for login', [{ text: '' }], { cancelable: true });
+    } else if (result.username === user && result.password === pass) {
+      setIsLoading(true)
+      setUserToken(state.username)
+      await AsyncStorage.setItem('userToken', userToken)
+      setIsLoading(false)
+      clearAll()
+    } else {
+      Alert.alert('', 'Incorrect Username or Password', [{ text: '' }], { cancelable: true });
+    }
+  }
+
+  // Logout
+  const logout = () => {
+    setIsLoading(true)
+    setUserToken(state.username)
+    AsyncStorage.removeItem('userToken')
+    setIsLoading(false)
+  }
+
+  const isLoggedIn = async () => {
+    try {
+      setIsLoading(true)
+      let token = await AsyncStorage.getItem('userToken')
+      setUserToken(token)
+      setIsLoading(false)
+
+      let result = getItem()
+      if (result != null) {
+        dispatch({ type: UPDATE, payload: update })
+      }
+    } catch (e) {
+      console.log('is logged in error ' + e)
+    }
+  }
+
+  // setItem
+  const setItem = async (obj) => {
+    try {
+      const jsonValue = JSON.stringify(obj)
+      await AsyncStorage.setItem('user', jsonValue)
+    } catch (e) {
+      // save error
+      console.log(e)
+    }
+  }
+
+  // getItem
+  const getItem = async () => {
+    try {
+      const result = await AsyncStorage.getItem('user')
+      let update
+      if (result != null) {
+        update = JSON.parse(result)
+        return update
+        // dispatch({ type: UPDATE, payload: update })
+      }
+    } catch (e) {
+      // read error
+      console.log(e)
+    }
+  }
+
   return <AppContext.Provider
     value={{
+      email: state.email,
+      username: state.username,
+      password: state.password,
       taskItems: state.taskItems,
       eventItems: state.eventItems,
       modalVisible: state.modalVisible,
+      isLoading,
+      userToken,
       addTask,
       deleteTask,
       addEvent,
       deleteEvent,
       openModal,
       closeModal,
-      formatTime
+      formatTime,
+      register,
+      login,
+      logout
     }}
   >
     {props.children}
