@@ -1,9 +1,9 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useReducer, useEffect, useState, useRef } from 'react';
 import { Alert, Keyboard } from 'react-native'
 import AppContext from './appContext';
 import AppReducer from './appReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+import * as Notifications from 'expo-notifications'
 import {
   ADD_EVENT,
   ADD_TASK,
@@ -40,6 +40,112 @@ const AppState = props => {
     console.log(state)
   }, [state])
 
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+
+  // const Notification = () => {
+  //   const [expoPushToken, setExpoPushToken] = useState("");
+  //   const [notification, setNotification] = useState(false);
+  //   const notificationListener = useRef();
+  //   const responseListener = useRef();
+
+  //   useEffect(() => {
+  //     registerForPushNotificationsAsync().then((token) =>
+  //       setExpoPushToken(token)
+  //     );
+
+  //     notificationListener.current =
+  //       Notifications.addNotificationReceivedListener((notification) => {
+  //         setNotification(notification);
+  //       });
+
+  //     responseListener.current =
+  //       Notifications.addNotificationResponseReceivedListener((response) => {
+  //         console.log(response);
+  //       });
+
+  //     return () => {
+  //       Notifications.removeNotificationSubscription(
+  //         notificationListener.current
+  //       );
+  //       Notifications.removeNotificationSubscription(responseListener.current);
+  //     };
+  //   }, []);
+
+  //   return (
+  //     null
+  //   );
+  // }
+
+  // const schedulePushNotification = async (className, slot, type, time, day) => {
+  //   time = new Date(time.getTime() - 5 * 60000);
+  //   var days = [
+  //     "Sunday",
+  //     "Monday",
+  //     "Tuesday",
+  //     "Wednesday",
+  //     "Thursday",
+  //     "Friday",
+  //     "Saturday",
+  //   ];
+  //   const weekday = days.indexOf(day) + 1;
+  //   const hours = time.getHours();
+  //   const minutes = time.getMinutes();
+  //   const id = await Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: className + " " + type,
+  //       body: slot,
+  //       // sound: 'default',
+  //     },
+  //     trigger: {
+  //       weekday: weekday,
+  //       hour: hours,
+  //       minute: minutes,
+  //       repeats: true,
+  //     },
+  //   });
+  //   console.log("notif id on scheduling", id)
+  //   return id;
+  // }
+
+  const cancelNotification = async (notifId) => {
+    await Notifications.cancelScheduledNotificationAsync(notifId);
+  }
+
+  const notifications = async (title, body, day, time) => {
+    time = new Date(time.getTime() - 5 * 60000);
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const weekday = days.indexOf(day) + 1;
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Time for your Lecture",
+        body: "You have " + title + ' ' + body + "now",
+        data: {},
+      },
+      trigger: {
+        weekday: day,
+        hour: hours,
+        minute: minutes,
+        repeats: true,
+      },
+    });
+    console.log("notif id on scheduling")
+  }
 
   //  Add Task
   const addTask = (task, setTask, navigation) => {
@@ -70,7 +176,8 @@ const AppState = props => {
       Alert.alert('', 'Please select day', [{ text: '' }], { cancelable: true });
     } else {
       Keyboard.dismiss();
-      let actualTime = formatTime(courseTime)
+      notifications(CourseCode, courseTitle,);
+      let actualTime = courseTime
       const event = { day: courseDay, code: CourseCode, title: courseTitle, time: actualTime };
       dispatch({ type: ADD_EVENT, payload: event })
       clearAll()

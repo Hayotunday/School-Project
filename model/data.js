@@ -127,3 +127,19 @@ const getPresentDay = () => {
 	const d = new Date();
 	let day = days[d.getDay()];
 };
+
+const notifications = async (day) => {
+	var days = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday",
+	];
+	const weekday = days.indexOf(day) + 1;
+	console.log(weekday)
+}
+
+notifications("Monday")
